@@ -1,0 +1,12 @@
+{
+  "name": "tic-tac-tao",
+  "version": "1.0.0",
+  "description": "Game Server for tic-tac-tao (Supporting React Js)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server" : "nodemon index.js"
+  },
+  "author": "Vivek Vijayan",
+  "license": "MIT"
+}
