@@ -31,14 +31,14 @@ var gameJson = {
         a11: "", a12: "", a13: "",
         b11: "", b12: "", b13: "",
         c11: "", c12: "", c13: "",
-    }
+    },
 }
 
 // Room Availability 🏡
-var roomAvailability = (roomCode) => {
+var getNewRoomForGame = (roomCode) => {
     var roomAvailable = Math.floor((Math.random() * 3400 + 21343)).toString()
     if (db.collection('gameplay').doc(roomCode).get().exists) {
-        roomAvailability(roomCode)
+        getNewRoomForGame(roomCode)
     }
     else
         return roomAvailable
@@ -57,16 +57,15 @@ app.get('/', (req, res) => {
 
 app.get('/start/:username/:lastGameCode', (req, res) => {
     var user1 = req.params.username;
-    const result = db.collection('gameplay').doc(req.params.lastGameCode).delete()
+    db.collection('gameplay').doc(req.params.lastGameCode).delete()
     if (user1.length > 0) {
-        gameJson.roomCode = roomAvailability('0')
+        gameJson.roomCode = getNewRoomForGame('0')
         gameJson.players.player1.playerName = user1;
         gameJson.status = "Waiting for player 2";
         db.collection('gameplay').doc(gameJson.roomCode).set(gameJson);
         res.json({
             roomCode: gameJson.roomCode,
             status: gameJson.status,
-            lastgame : result
         })
     }
     else {
@@ -78,19 +77,16 @@ app.get('/start/:username/:lastGameCode', (req, res) => {
 
 app.get('/join/:code/:username', (req, res) => {
     var user2 = req.params.username
-    var code = (req.params.code)
-    const game = db.collection('gameplay').doc(code)
-    console.log(code)
-    const session = game.get();
-    if (!session.exists) {
+    if (db.collection('gameplay').doc(req.params.code).get().exists) {
         res.json({
-            error: "Invalid Game Code"
+            firstone : "vivek",
+            error: db.collection('gameplay')
         })
     }
     else {
         res.json({
-            gameOn: "game on",
-            game: session.data()
+            error: "game off",
+            erer: db.collection('gameplay').doc()
         })
     }
 })
